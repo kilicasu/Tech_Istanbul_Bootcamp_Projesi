@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    
+</head>
+<body>
+
+    
+    <div style = "margin-top:150px;" class="container">
+        <h3> Todo List </h3>  
+        <hr>    <!-- altına çizgi koyuyor  --> 
+
+        <form action = "/add" method = "post">
+            <div class="form-group">
+                <label for="formGroupExampleInput">Todo Title</label>
+                <input type="text" name = "title" class="form-control" id="formGroupExampleInput" placeholder="Enter the Title">
+                <!--   name kısmı önmeli ona göre add kısmında çağırıyorum -->
+            </div>
+            <div class="form-group">
+                <label for="formGroupExampleInput2">Todo Content</label>
+                <textarea type="text" name = "content" class="form-control" id="formGroupExampleInput2" placeholder="Enter the Content"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        <br>
+        {% if todos == [] %}
+                <div class="alert alert-primary" role="alert">
+                Herhangi bir todo yok...
+                </div>
+        {% else %}
+                <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">id</th>
+                        <th scope="col">Todo Başlık</th>
+                        <th scope="col">Todo İçerik</th>
+                        <th scope="col">Durum</th>
+                        <th scope="col">Tamamla</th>
+                        <th scope = "col">Sil</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for todo in todos %}
+                    <tr>
+                        <th scope="row">{{todo.id}}</th>
+                        <td><a href="/detail/{{todo.id}}">{{todo.title}}</a></td>
+                        <td>{{todo.content}}</td>
+                        {% if todo.complete == False %}
+                        <td>Tamamlanmadı</td>
+                        {% else %}
+                        <td>Tamamlandı</td>
+                        {% endif %}
+                        <td><a href = "/complete/{{todo.id}}" class = "btn btn-primary" >Tamamla</a> </td>
+                        <td><a href="/delete/{{todo.id}} " class = "btn btn-primary">Sil</a></td>
+                    </tr>       
+                    {% endfor %}
+                </tbody>
+                </table>
+        {% endif %}
+
+        
+  </div>
+     
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+ 
+
+</body>
+</html>
