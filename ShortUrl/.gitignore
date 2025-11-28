@@ -1,0 +1,19 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# Sanal ortam
+env/
+
+# Veritabanı
+urlshortener.db
+
+# IDE ve editörler
+.vscode/
+
+# Log dosyaları
+*.log
+
+# Sistem dosyaları
+.DS_Store
+Thumbs.db

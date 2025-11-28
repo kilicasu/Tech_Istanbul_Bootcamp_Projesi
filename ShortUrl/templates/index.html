@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-store" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basit URL Kısaltıcı</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container py-5">
+        <h1 class="mb-4 text-center">Basit URL Kısaltıcı</h1>
+
+        <!-- Flash mesajları -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, msg in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ msg }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- URL formu -->
+        <div class="card p-4 shadow-sm">
+            <form method="POST" action="{{ url_for('index') }}">
+                <div class="mb-3">
+                    <label for="original_url" class="form-label">Uzun URL</label>
+                    <input type="text" class="form-control" id="original_url" name="original_url">
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Kısalt</button>
+            </form>
+        </div>
+
+        <!-- Kısa URL gösterimi -->
+        {% if new_url %}
+            <div class="alert alert-success mt-4 text-center">
+                <p class="mb-1"><strong>Kısa URL oluşturuldu:</strong></p>
+                <p class="mb-0">
+                    <a href="{{ request.host_url }}{{ new_url.short_url }}" target="_blank">
+                        {{ request.host_url }}{{ new_url.short_url }}
+                    </a>
+                </p>
+            </div>
+        {% endif %}
+
+        <!-- Tüm Kısaltılmış URL'ler -->
+        <hr class="my-4">
+        <h3 class="text-center mb-3">Tüm Kısaltılmış URL’ler</h3>
+        <table class="table table-bordered table-striped shadow-sm">
+            <thead class="table-dark">
+                <tr>
+                    <th>Orijinal URL</th>
+                    <th>Kısa URL</th>
+                    <th>Ziyaret Sayısı</th>
+                </tr>
+            </thead>
+            <tbody id="url-table-body">
+                {% for url in urls %}
+                    <tr>
+                        <td>{{ url.original_url }}</td>
+                        <td>
+                            <a href="{{ request.host_url }}{{ url.short_url }}" target="_blank">
+                                {{ request.host_url }}{{ url.short_url }}
+                            </a>
+                        </td>
+                        <td>{{ url.visit_count }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div> <!-- container sonu -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        async function refreshTable() {
+            try {
+                const resp = await fetch("/api/urls");
+                const data = await resp.json();
+                const tbody = document.getElementById("url-table-body");
+                tbody.innerHTML = "";
+                data.urls.forEach(url => {
+                    const tr = document.createElement("tr");
+                    tr.innerHTML = `<td>${url.original_url}</td>
+                                    <td><a href="${url.short_url}" target="_blank">${url.short_url}</a></td>
+                                    <td>${url.visit_count}</td>`;
+                    tbody.appendChild(tr);
+                });
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        // 5 saniyede bir tabloyu yenile
+        setInterval(refreshTable, 5000);
+    </script>
+</body>
+</html>
