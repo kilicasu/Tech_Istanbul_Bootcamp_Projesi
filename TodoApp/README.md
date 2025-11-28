@@ -28,4 +28,4 @@ Bu proje **Flask** ve **Bootstrap** kullanılarak geliştirilmiştir. Kullanıc�
 
 1. Depoyu klonlayın:
 ```bash
-git clone https://github.com/kilicasu/tech_istanbul_bootcamp_projesi.git
+git clone https://github.com/kilicasu/Tech_Istanbul_Bootcamp_Projesi.git
