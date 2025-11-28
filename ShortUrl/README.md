@@ -1,1 +1,0 @@
-# Tech_Istanbul_Bootcamp_Projesi
